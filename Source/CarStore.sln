@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{99648213-5F41-419A-B132-BAE9F5B6E1FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarStore.Web", "Web\CarStore.Web\CarStore.Web.csproj", "{5E44D963-7D03-49BD-8EB2-CDC565191E62}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E44D963-7D03-49BD-8EB2-CDC565191E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E44D963-7D03-49BD-8EB2-CDC565191E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E44D963-7D03-49BD-8EB2-CDC565191E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E44D963-7D03-49BD-8EB2-CDC565191E62}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E44D963-7D03-49BD-8EB2-CDC565191E62} = {99648213-5F41-419A-B132-BAE9F5B6E1FD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4718F47-EA6B-4EBC-9E87-33510F379973}
+	EndGlobalSection
+EndGlobal
