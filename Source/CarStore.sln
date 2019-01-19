@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarStore.Data.Models", "Dat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E3DF19ED-753D-4F06-B356-BADD3AABD0BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarStore.Common", "Common\CarStore.Common\CarStore.Common.csproj", "{BA382ED0-B791-4B82-86E0-E73D7E15867C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarStore.Common", "Common\CarStore.Common\CarStore.Common.csproj", "{BA382ED0-B791-4B82-86E0-E73D7E15867C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

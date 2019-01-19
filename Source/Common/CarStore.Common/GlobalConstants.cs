@@ -7,5 +7,8 @@
         public const int MaxNameLength = 25;
         public const int MinAge = 18;
         public const int MaxAge = 120;
+
+        public const string ConnectionStringKey = "DefaultConnection";
+        public const string JsonFile = "appsettings.json";
     }
 }
