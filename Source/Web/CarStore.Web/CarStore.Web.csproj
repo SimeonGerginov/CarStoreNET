@@ -18,7 +18,6 @@
     <ProjectReference Include="..\..\Common\CarStore.Common\CarStore.Common.csproj" />
     <ProjectReference Include="..\..\Data\CarStore.Data.Models\CarStore.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\CarStore.Data\CarStore.Data.csproj" />
-    <ProjectReference Include="..\CarStore.Web.Infrastructure\CarStore.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

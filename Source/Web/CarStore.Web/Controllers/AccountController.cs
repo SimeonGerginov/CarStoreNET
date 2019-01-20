@@ -1,17 +1,14 @@
 ﻿using System.Threading.Tasks;
 
 using CarStore.Data.Models;
-using CarStore.Web.Infrastructure;
 using CarStore.Web.ViewModels.Account;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarStore.Web.Controllers
 {
-    [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<Customer> _userManager;
         private readonly SignInManager<Customer> _signInManager;
@@ -23,21 +20,15 @@ namespace CarStore.Web.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public IActionResult Register()
         {
-            this.ViewData["ReturnUrl"] = returnUrl;
-
             return this.View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            this.ViewData["ReturnUrl"] = returnUrl;
-
             if (this.ModelState.IsValid)
             {
                 var customer = new Customer
@@ -57,7 +48,7 @@ namespace CarStore.Web.Controllers
                 }
 
                 // If the creation of the Customer was not successful.
-                return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, this.ModelState));
+                this.AddErrorsToModelState(result);
             }
 
             // If we got this far, something failed, redisplay form
