@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 
+using CarStore.Common;
 using CarStore.Data.Models;
 using CarStore.Web.ViewModels.Account;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +19,37 @@ namespace CarStore.Web.Controllers
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Login()
+        {
+            // Clears the existing external cookie to ensure a clean login process.
+            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var result = await this._signInManager.PasswordSignInAsync(model.Email, model.Password,
+                    isPersistent: true, lockoutOnFailure: false);
+
+                if (result.Succeeded)
+                {
+                    return this.RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+
+                // If the login was not successful.
+                this.ModelState.TryAddModelError(GlobalConstants.LoginErrorKey, GlobalConstants.LoginErrorMessage);
+            }
+
+            // If we got this far, something failed, redisplay form.
+            return this.View(model);
         }
 
         [HttpGet]
@@ -43,7 +76,7 @@ namespace CarStore.Web.Controllers
                 var result = await this._userManager.CreateAsync(customer, model.Password);
                 if (result.Succeeded)
                 {
-                    await this._signInManager.SignInAsync(customer, isPersistent: false);
+                    await this._signInManager.SignInAsync(customer, isPersistent: true);
                     return this.RedirectToAction(nameof(HomeController.Index), "Home");
                 }
 
@@ -51,7 +84,7 @@ namespace CarStore.Web.Controllers
                 this.AddErrorsToModelState(result);
             }
 
-            // If we got this far, something failed, redisplay form
+            // If we got this far, something failed, redisplay form.
             return this.View(model);
         }
     }

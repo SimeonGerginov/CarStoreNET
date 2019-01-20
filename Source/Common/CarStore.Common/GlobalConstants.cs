@@ -12,5 +12,8 @@
 
         public const string ConnectionStringKey = "DefaultConnection";
         public const string JsonFile = "appsettings.json";
+
+        public const string LoginErrorKey = "1";
+        public const string LoginErrorMessage = "Invalid login attempt.";
     }
 }
