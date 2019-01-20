@@ -5,6 +5,7 @@ using CarStore.Data.Models;
 using CarStore.Web.ViewModels.Account;
 
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,6 +51,15 @@ namespace CarStore.Web.Controllers
 
             // If we got this far, something failed, redisplay form.
             return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await this._signInManager.SignOutAsync();
+            return this.RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         [HttpGet]
