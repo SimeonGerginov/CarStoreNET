@@ -30,7 +30,14 @@ namespace CarStore.Web
                 options.UseSqlServer(Configuration.GetConnectionString(GlobalConstants.ConnectionStringKey));
             });
 
-            services.AddIdentity<Customer, IdentityRole>()
+            services.AddIdentity<Customer, IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = GlobalConstants.MinPasswordLength;
+                })
                 .AddEntityFrameworkStores<CarStoreDbContext>()
                 .AddDefaultTokenProviders();
 

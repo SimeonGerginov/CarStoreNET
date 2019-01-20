@@ -10,12 +10,15 @@
 	<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
 	<PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.1.2" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
+	<PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.0" />
+	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\CarStore.Common\CarStore.Common.csproj" />
     <ProjectReference Include="..\..\Data\CarStore.Data.Models\CarStore.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\CarStore.Data\CarStore.Data.csproj" />
+    <ProjectReference Include="..\CarStore.Web.Infrastructure\CarStore.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
