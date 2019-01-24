@@ -1,6 +1,9 @@
 ﻿using CarStore.Common;
 using CarStore.Data;
 using CarStore.Data.Models;
+using CarStore.Data.Seeding;
+using CarStore.Services;
+using CarStore.Services.Contracts;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,6 +51,10 @@ namespace CarStore.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Register services.
+            services.AddScoped(typeof(IAdminService), typeof(AdminService));
+            services.AddScoped(typeof(IFileConverter), typeof(FileConverter));
+            services.AddScoped(typeof(ICatalogService), typeof(CatalogService));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -55,6 +62,19 @@ namespace CarStore.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // Seeds data on application startup.
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<CarStoreDbContext>();
+
+                if (env.IsDevelopment())
+                {
+                    dbContext.Database.Migrate();
+                }
+
+                new CarStoreDbContextSeeder().SeedAsync(dbContext).GetAwaiter().GetResult();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

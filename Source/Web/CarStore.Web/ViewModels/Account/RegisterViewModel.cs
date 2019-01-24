@@ -10,7 +10,7 @@ namespace CarStore.Web.ViewModels.Account
             GlobalConstants.MaxNameLength,
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
             MinimumLength = GlobalConstants.MinNameLength)]
-        [Display(Name = "First Name")]
+        [Display(Name = "Име")]
         public string FirstName { get; set; }
 
         [Required]
@@ -18,7 +18,7 @@ namespace CarStore.Web.ViewModels.Account
             GlobalConstants.MaxNameLength,
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
             MinimumLength = GlobalConstants.MinNameLength)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Фамилия")]
         public string LastName { get; set; }
 
         [Required]
@@ -26,12 +26,12 @@ namespace CarStore.Web.ViewModels.Account
             GlobalConstants.MinNameLength, 
             GlobalConstants.MaxNameLength, 
             ErrorMessage = "The {0} must be at least {1} and at max {2} characters long.")]
-        [Display(Name = "Age")]
+        [Display(Name = "Години")]
         public int Age { get; set; }
 
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Имейл")]
         public string Email { get; set; }
 
         [Required]
@@ -40,11 +40,11 @@ namespace CarStore.Web.ViewModels.Account
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", 
             MinimumLength = GlobalConstants.MinPasswordLength)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Парола")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm Password")]
+        [Display(Name = "Потвърди Парола")]
         [Compare("Password", ErrorMessage = "The password and the confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }

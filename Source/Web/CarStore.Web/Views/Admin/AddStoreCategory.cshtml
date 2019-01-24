@@ -1,0 +1,35 @@
+﻿@model StoreCategoryViewModel
+@{
+    ViewData["Title"] = "Добави Категория в магазин";
+}
+
+<div class="row">
+    <div class="col-md-offset-4 col-md-3">
+        <form method="post" class="form-horizontal" role="form">
+            <h4 class="text-center">@ViewData["Title"]</h4>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DepartmentName" class="control-label"></label>
+                <select asp-for="DepartmentName" asp-items="@Model.DepartmentsSelectList" class="form-control"></select>
+                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Създаване</button>
+            </div>
+        </form>
+    </div>
+</div>
