@@ -30,6 +30,10 @@
         public const int MinDepartmentName = 3;
         public const int MaxDepartmentName = 25;
 
+        // Review Constants
+        public const int MinReviewLength = 20;
+        public const int MaxReviewLength = 300;
+
         public const int CarsPerPage = 1;
 
         public const string ConnectionStringKey = "DefaultConnection";

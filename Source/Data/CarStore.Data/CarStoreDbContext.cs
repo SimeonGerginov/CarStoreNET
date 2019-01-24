@@ -24,6 +24,14 @@ namespace CarStore.Data
 
         public virtual DbSet<Car> Cars { get; set; }
 
+        public virtual DbSet<Review> Reviews { get; set; }
+
+        public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+        public virtual DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+
+        public virtual DbSet<Order> Orders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -40,6 +48,27 @@ namespace CarStore.Data
                 entity.HasKey(csc => new { csc.CarId, csc.StoreCategoryId });
                 entity.HasOne(csc => csc.Car).WithMany(sc => sc.CarStoreCategories).HasForeignKey(csc => csc.CarId);
                 entity.HasOne(csc => csc.StoreCategory).WithMany(c => c.CarStoreCategories).HasForeignKey(csc => csc.StoreCategoryId);
+            });
+
+            builder.Entity<Order>(entity => 
+            {
+                entity.HasKey(o => new
+                {
+                    o.CustomerId, o.ShoppingCartId
+                });
+            });
+
+            builder.Entity<ShoppingCart>(entity =>
+            {
+                entity.HasKey(sc => new
+                {
+                    sc.Id, sc.CustomerId
+                }); 
+            });
+
+            builder.Entity<ShoppingCartItem>(entity =>
+            {
+                entity.HasKey(sci => sci.CarId); 
             });
         }
     }

@@ -4,13 +4,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarStore.Data.Migrations
 {
     [DbContext(typeof(CarStoreDbContext))]
-    partial class CarStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190124193232_AddedShoppingCartAndOrder")]
+    partial class AddedShoppingCartAndOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
