@@ -7,7 +7,7 @@ namespace CarStore.Services.Contracts
 {
     public interface IAdminService
     {
-        void AddCarToDb(Car car);
+        Task AddCarToDbAsync(Car car, string brandName, string modelName, string categoryName, string storeCategoryName);
 
         Task AddStoreCategoryToDbAsync(StoreCategory storeCategory, string departmentName);
 

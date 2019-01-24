@@ -18,18 +18,49 @@ namespace CarStore.Services
             this._carStoreDbContext = carStoreDbContext;
         }
 
-        public void AddCarToDb(Car car)
+        public async Task AddCarToDbAsync(Car car, string brandName, string modelName, string categoryName, string storeCategoryName)
         {
             var carExists = this._carStoreDbContext.Cars
-                .Any(c => c.Name == car.Name && c.BrandId == car.BrandId && c.ModelId == car.ModelId);
+                .Any(c => c.Name == car.Name && c.Price == car.Price && c.Description == car.Description);
 
             if (carExists)
             {
                 throw new InvalidOperationException("Car already exists.");
             }
 
+            var brand = this._carStoreDbContext.Brands.FirstOrDefault(b => b.Name == brandName);
+            if (brand == null)
+            {
+                throw new InvalidOperationException("Brand does not exist.");
+            }
+
+            var model = this._carStoreDbContext.Models.FirstOrDefault(m => m.Name == modelName);
+            if (model == null)
+            {
+                throw new InvalidOperationException("Model does not exist.");
+            }
+
+            var category = this._carStoreDbContext.Categories.FirstOrDefault(c => c.Name == categoryName);
+            if (category == null)
+            {
+                throw new InvalidOperationException("Category does not exist.");
+            }
+
+            var storeCategory = this._carStoreDbContext.StoreCategories.FirstOrDefault(sc => sc.Name == storeCategoryName);
+            if (storeCategory == null)
+            {
+                throw new InvalidOperationException("Store Category does not exist.");
+            }
+
+            car.BrandId = brand.Id;
+            car.ModelId = model.Id;
+
             this._carStoreDbContext.Cars.Add(car);
             this._carStoreDbContext.SaveChanges();
+
+            await this.AddCarToCategory(car, category);
+            await this.AddCarToStoreCategory(car, storeCategory);
+            await this._carStoreDbContext.SaveChangesAsync();
         }
 
         public async Task AddStoreCategoryToDbAsync(StoreCategory storeCategory, string departmentName)
@@ -88,6 +119,28 @@ namespace CarStore.Services
         public IEnumerable<Category> GetAllCategoriesInDb()
         {
             return this._carStoreDbContext.Categories.AsEnumerable();
+        }
+
+        private async Task AddCarToCategory(Car car, Category category)
+        {
+            var carCategory = new CarCategory
+            {
+                CarId = car.Id,
+                CategoryId = category.Id
+            };
+
+            await this._carStoreDbContext.CarsAndCarCategories.AddAsync(carCategory);
+        }
+
+        private async Task AddCarToStoreCategory(Car car, StoreCategory storeCategory)
+        {
+            var carStoreCategory = new CarStoreCategory
+            {
+                CarId = car.Id,
+                StoreCategoryId = storeCategory.Id
+            };
+
+            await this._carStoreDbContext.CarsAndCarStoreCategories.AddAsync(carStoreCategory);
         }
     }
 }

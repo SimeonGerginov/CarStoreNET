@@ -24,6 +24,10 @@ namespace CarStore.Data
 
         public virtual DbSet<Car> Cars { get; set; }
 
+        public virtual DbSet<CarCategory> CarsAndCarCategories { get; set; }
+
+        public virtual DbSet<CarStoreCategory> CarsAndCarStoreCategories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -4,6 +4,7 @@ using CarStore.Data.Models;
 using CarStore.Data.Seeding;
 using CarStore.Services;
 using CarStore.Services.Contracts;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -52,6 +53,7 @@ namespace CarStore.Web
 
             // Register services.
             services.AddScoped(typeof(IAdminService), typeof(AdminService));
+            services.AddScoped(typeof(IFileConverter), typeof(FileConverter));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

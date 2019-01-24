@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using CarStore.Common;
 using CarStore.Data.Models.Enums;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarStore.Web.ViewModels.Admin
@@ -33,7 +34,7 @@ namespace CarStore.Web.ViewModels.Admin
 
         [Required]
         [Display(Name = "Снимка")]
-        public byte[] Image { get; set; }
+        public IFormFile Image { get; set; }
         
         [Display(Name = "Марка")]
         public string BrandName { get; set; }

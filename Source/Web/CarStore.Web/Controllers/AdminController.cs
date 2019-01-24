@@ -15,10 +15,12 @@ namespace CarStore.Web.Controllers
     public class AdminController : BaseController
     {
         private readonly IAdminService _adminService;
+        private readonly IFileConverter _fileConverter;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService, IFileConverter fileConverter)
         {
             this._adminService = adminService;
+            this._fileConverter = fileConverter;
         }
 
         [HttpGet]
@@ -49,6 +51,38 @@ namespace CarStore.Web.Controllers
             };
 
             return this.View(carViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCar(CarViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var car = new Car
+                {
+                    Name = model.Name,
+                    Description = model.Description,
+                    Price = model.Price,
+                    Image = await this._fileConverter.PostedToByteArray(model.Image),
+                    YearOfManufacture = model.YearOfManufacture,
+                    Color = model.Color,
+                    Mileage = model.Mileage,
+                    Gearbox = model.Gearbox,
+                    EngineType = model.EngineType
+                };
+
+                var brandName = model.BrandName;
+                var modelName = model.ModelName;
+                var categoryName = model.CategoryName;
+                var storeCategoryName = model.StoreCategoryName;
+
+                await this._adminService.AddCarToDbAsync(car, brandName, modelName, categoryName, storeCategoryName);
+                return this.RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+
+            // If we got this far, something failed, redisplay form.
+            return this.View(model);
         }
 
         [HttpGet]
