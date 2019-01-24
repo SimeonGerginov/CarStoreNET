@@ -19,8 +19,8 @@
         public const int MaxCarName = 25;
         public const int MinDescriptionLength = 20;
         public const int MaxDescriptionLength = 200;
-        public const int MinYearLength = 4;
-        public const int MaxYearLength = 4;
+        public const int MinYearLength = 1892;
+        public const int MaxYearLength = 2019;
 
         // Category Constants
         public const int MinCategoryName = 3;

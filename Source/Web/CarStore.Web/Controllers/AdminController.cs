@@ -59,12 +59,14 @@ namespace CarStore.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
+                var image = await this._fileConverter.PostedToByteArray(model.Image);
+
                 var car = new Car
                 {
                     Name = model.Name,
                     Description = model.Description,
                     Price = model.Price,
-                    Image = await this._fileConverter.PostedToByteArray(model.Image),
+                    Image = image,
                     YearOfManufacture = model.YearOfManufacture,
                     Color = model.Color,
                     Mileage = model.Mileage,

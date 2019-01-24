@@ -31,8 +31,7 @@ namespace CarStore.Web.ViewModels.Admin
         [Required]
         [Display(Name = "Цена")]
         public decimal Price { get; set; }
-
-        [Required]
+        
         [Display(Name = "Снимка")]
         public IFormFile Image { get; set; }
         

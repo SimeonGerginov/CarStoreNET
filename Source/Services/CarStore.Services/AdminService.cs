@@ -55,11 +55,22 @@ namespace CarStore.Services
             car.BrandId = brand.Id;
             car.ModelId = model.Id;
 
-            this._carStoreDbContext.Cars.Add(car);
-            this._carStoreDbContext.SaveChanges();
+            var carCategory = new CarCategory
+            {
+                Car = car,
+                Category = category
+            };
 
-            await this.AddCarToCategory(car, category);
-            await this.AddCarToStoreCategory(car, storeCategory);
+            var carStoreCategory = new CarStoreCategory
+            {
+                Car = car,
+                StoreCategory = storeCategory
+            };
+
+            car.CarCategories.Add(carCategory);
+            car.CarStoreCategories.Add(carStoreCategory);
+            
+            await this._carStoreDbContext.Cars.AddAsync(car);
             await this._carStoreDbContext.SaveChangesAsync();
         }
 
@@ -119,28 +130,6 @@ namespace CarStore.Services
         public IEnumerable<Category> GetAllCategoriesInDb()
         {
             return this._carStoreDbContext.Categories.AsEnumerable();
-        }
-
-        private async Task AddCarToCategory(Car car, Category category)
-        {
-            var carCategory = new CarCategory
-            {
-                CarId = car.Id,
-                CategoryId = category.Id
-            };
-
-            await this._carStoreDbContext.CarsAndCarCategories.AddAsync(carCategory);
-        }
-
-        private async Task AddCarToStoreCategory(Car car, StoreCategory storeCategory)
-        {
-            var carStoreCategory = new CarStoreCategory
-            {
-                CarId = car.Id,
-                StoreCategoryId = storeCategory.Id
-            };
-
-            await this._carStoreDbContext.CarsAndCarStoreCategories.AddAsync(carStoreCategory);
         }
     }
 }
