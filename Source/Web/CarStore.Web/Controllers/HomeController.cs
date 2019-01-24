@@ -8,7 +8,7 @@ namespace CarStore.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return this.RedirectToAction(nameof(CatalogController.Index), "Catalog");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

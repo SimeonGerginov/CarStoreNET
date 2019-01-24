@@ -1,0 +1,28 @@
+﻿@model IEnumerable<CatalogCarViewModel>
+@{
+    ViewData["Title"] = "Каталог";
+}
+
+<h2>Каталог с коли</h2>
+
+<div class="row">
+    @foreach (var catalogCar in Model)
+    {
+        <div class="col-md-2">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" style="width: 100%" src="@Url.Action("GetCarPhoto", "Catalog", new { area = "", carName = catalogCar.Name})" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@catalogCar.Name</h5>
+                    <p class="card-text">@catalogCar.Description</p>
+                    <p class="card-text"><strong>Марка: </strong>@catalogCar.BrandName</p>
+                    <p class="card-text"><strong>Модел: </strong>@catalogCar.ModelName</p>
+                    <p class="card-text"><strong>Цена: </strong>@catalogCar.Price</p>
+                    <p class="card-text"><strong>Тип двигател: </strong>@catalogCar.EngineType</p>
+                    <p class="card-text"><strong>Скоростна кутия: </strong>@catalogCar.Gearbox</p>
+                    <p class="card-text"><strong>Пробег: </strong>@catalogCar.Mileage</p>
+                    <p class="card-text"><strong>Година на производство: </strong>@catalogCar.YearOfManufacture</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
