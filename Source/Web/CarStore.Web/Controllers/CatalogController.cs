@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using CarStore.Common;
 using CarStore.Data.Models;
 using CarStore.Services.Contracts;
 using CarStore.Web.ViewModels.Catalog;
 
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace CarStore.Web.Controllers
 {
@@ -17,7 +19,7 @@ namespace CarStore.Web.Controllers
             this._catalogService = catalogService;
         }
 
-        public IActionResult Index(string searchString)
+        public IActionResult Index(string searchString, int? page)
         {
             this.ViewData["CurrentFilter"] = searchString;
             
@@ -50,7 +52,10 @@ namespace CarStore.Web.Controllers
                 catalogCars.Add(catalogCar);
             }
 
-            return this.View(catalogCars);
+            var pageNumber = page ?? 1;
+            var carsPerPage = catalogCars.ToPagedList(pageNumber, GlobalConstants.CarsPerPage);
+
+            return this.View(carsPerPage);
         }
 
         public FileContentResult GetCarPhoto(string carName)

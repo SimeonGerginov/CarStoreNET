@@ -30,6 +30,8 @@
         public const int MinDepartmentName = 3;
         public const int MaxDepartmentName = 25;
 
+        public const int CarsPerPage = 1;
+
         public const string ConnectionStringKey = "DefaultConnection";
         public const string JsonFile = "appsettings.json";
 

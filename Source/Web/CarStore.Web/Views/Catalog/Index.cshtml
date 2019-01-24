@@ -1,7 +1,11 @@
-﻿@model IEnumerable<CatalogCarViewModel>
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core
+@model IPagedList<CatalogCarViewModel>
 @{
     ViewData["Title"] = "Каталог";
 }
+
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 <h2 class="text-center">Каталог с коли</h2>
 
@@ -36,3 +40,5 @@
         </div>
     }
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
