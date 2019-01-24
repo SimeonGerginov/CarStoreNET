@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,17 +32,24 @@ namespace CarStore.Services
             this._carStoreDbContext.SaveChanges();
         }
 
-        public void AddStoreCategoryToDb(StoreCategory storeCategory)
+        public async Task AddStoreCategoryToDbAsync(StoreCategory storeCategory, string departmentName)
         {
             var storeCategoryExists = this._carStoreDbContext.StoreCategories.Any(sc => sc.Name == storeCategory.Name);
-
             if (storeCategoryExists)
             {
                 throw new InvalidOperationException("Store Category already exists.");
             }
 
-            this._carStoreDbContext.StoreCategories.Add(storeCategory);
-            this._carStoreDbContext.SaveChanges();
+            var department = this._carStoreDbContext.Departments.FirstOrDefault(d => d.Name == departmentName);
+            if (department == null)
+            {
+                throw new InvalidOperationException("Department does not exist.");
+            }
+
+            storeCategory.DepartmentId = department.Id;
+
+            await this._carStoreDbContext.StoreCategories.AddAsync(storeCategory);
+            await this._carStoreDbContext.SaveChangesAsync();
         }
 
         public async Task AddDepartmentToDbAsync(Department department)
@@ -55,6 +63,11 @@ namespace CarStore.Services
 
             await this._carStoreDbContext.Departments.AddAsync(department);
             await this._carStoreDbContext.SaveChangesAsync();
+        }
+
+        public IEnumerable<Department> GetAllDepartmentsInDb()
+        {
+            return this._carStoreDbContext.Departments.AsEnumerable();
         }
     }
 }

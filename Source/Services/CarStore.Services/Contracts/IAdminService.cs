@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using CarStore.Data.Models;
 
 namespace CarStore.Services.Contracts
@@ -7,8 +9,10 @@ namespace CarStore.Services.Contracts
     {
         void AddCarToDb(Car car);
 
-        void AddStoreCategoryToDb(StoreCategory storeCategory);
+        Task AddStoreCategoryToDbAsync(StoreCategory storeCategory, string departmentName);
 
         Task AddDepartmentToDbAsync(Department department);
+
+        IEnumerable<Department> GetAllDepartmentsInDb();
     }
 }
