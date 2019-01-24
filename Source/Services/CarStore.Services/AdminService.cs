@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using CarStore.Data;
 using CarStore.Data.Models;
@@ -43,7 +44,7 @@ namespace CarStore.Services
             this._carStoreDbContext.SaveChanges();
         }
 
-        public void AddDepartmentToDb(Department department)
+        public async Task AddDepartmentToDbAsync(Department department)
         {
             var departmentExists = this._carStoreDbContext.Departments.Any(d => d.Name == department.Name);
 
@@ -52,8 +53,8 @@ namespace CarStore.Services
                 throw new InvalidOperationException("Department already exists.");
             }
 
-            this._carStoreDbContext.Departments.Add(department);
-            this._carStoreDbContext.SaveChanges();
+            await this._carStoreDbContext.Departments.AddAsync(department);
+            await this._carStoreDbContext.SaveChangesAsync();
         }
     }
 }

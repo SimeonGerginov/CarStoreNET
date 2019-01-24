@@ -1,4 +1,5 @@
-﻿using CarStore.Data.Models;
+﻿using System.Threading.Tasks;
+using CarStore.Data.Models;
 
 namespace CarStore.Services.Contracts
 {
@@ -8,6 +9,6 @@ namespace CarStore.Services.Contracts
 
         void AddStoreCategoryToDb(StoreCategory storeCategory);
 
-        void AddDepartmentToDb(Department department);
+        Task AddDepartmentToDbAsync(Department department);
     }
 }

@@ -2,7 +2,8 @@
 using CarStore.Data;
 using CarStore.Data.Models;
 using CarStore.Data.Seeding;
-
+using CarStore.Services;
+using CarStore.Services.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -49,6 +50,8 @@ namespace CarStore.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Register services.
+            services.AddScoped(typeof(IAdminService), typeof(AdminService));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
