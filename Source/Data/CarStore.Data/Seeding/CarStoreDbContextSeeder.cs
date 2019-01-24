@@ -19,6 +19,7 @@ namespace CarStore.Data.Seeding
             {
                 new BrandSeeder(),
                 new ModelSeeder(),
+                new CarCategoriesSeeder()
             };
 
             foreach (var seeder in seeders)

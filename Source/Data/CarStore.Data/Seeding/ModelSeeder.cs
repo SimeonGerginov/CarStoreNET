@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,15 +19,17 @@ namespace CarStore.Data.Seeding
 
             var namesOfModels = new List<string>()
             {
-                "California", "488 GTB", "488 Spider"
+                "California", "488 GTB", "488 Spider", "A4", "A3", "M3", "M4", "M6", "Lancia Dedra", "Lancia Delta",
+                "Lancia Cappa"
             };
-
-            // TODO: This should be refactored to check if the brand Ferrari exists in the DB.
-            var ferraryId = dbContext.Brands.First(b => b.Name == "Ferrari").Id;
+            
+            var brandsIds = dbContext.Brands.Select(b => b.Id).ToList();
+            var randomGeneratorForIds = new Random();
 
             foreach (var modelName in namesOfModels)
             {
-                await dbContext.Models.AddAsync(new Model { Name = modelName, BrandId = ferraryId });
+                var brandId = randomGeneratorForIds.Next(1, brandsIds.Count - 1);
+                await dbContext.Models.AddAsync(new Model { Name = modelName, BrandId = brandsIds[brandId] });
             }
         }
     }

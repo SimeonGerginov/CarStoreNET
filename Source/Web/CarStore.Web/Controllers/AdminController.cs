@@ -24,7 +24,31 @@ namespace CarStore.Web.Controllers
         [HttpGet]
         public IActionResult AddCar()
         {
-            return this.View();
+            var brandsSelectList = this._adminService
+                .GetAllBrandsInDb()
+                .Select(b => new SelectListItem { Text = b.Name, Value = b.Name });
+
+            var modelsSelectList = this._adminService
+                .GetAllModelsInDb()
+                .Select(m => new SelectListItem { Text = m.Name, Value = m.Name });
+
+            var categoriesSelectList = this._adminService
+                .GetAllCategoriesInDb()
+                .Select(c => new SelectListItem { Text = c.Name, Value = c.Name });
+
+            var storeCategoriesSelectList = this._adminService
+                .GetAllStoreCategoriesInDb()
+                .Select(sc => new SelectListItem { Text = sc.Name, Value = sc.Name });
+
+            var carViewModel = new CarViewModel
+            {
+                BrandsSelectList = brandsSelectList,
+                ModelsSelectList = modelsSelectList,
+                CategoriesSelectList = categoriesSelectList,
+                StoreCategoriesSelectList = storeCategoriesSelectList
+            };
+
+            return this.View(carViewModel);
         }
 
         [HttpGet]

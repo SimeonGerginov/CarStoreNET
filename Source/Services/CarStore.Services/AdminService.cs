@@ -65,9 +65,29 @@ namespace CarStore.Services
             await this._carStoreDbContext.SaveChangesAsync();
         }
 
+        public IEnumerable<Brand> GetAllBrandsInDb()
+        {
+            return this._carStoreDbContext.Brands.AsEnumerable();
+        }
+
+        public IEnumerable<Model> GetAllModelsInDb()
+        {
+            return this._carStoreDbContext.Models.AsEnumerable();
+        }
+
         public IEnumerable<Department> GetAllDepartmentsInDb()
         {
             return this._carStoreDbContext.Departments.AsEnumerable();
+        }
+
+        public IEnumerable<StoreCategory> GetAllStoreCategoriesInDb()
+        {
+            return this._carStoreDbContext.StoreCategories.AsEnumerable();
+        }
+
+        public IEnumerable<Category> GetAllCategoriesInDb()
+        {
+            return this._carStoreDbContext.Categories.AsEnumerable();
         }
     }
 }

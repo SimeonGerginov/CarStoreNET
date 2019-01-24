@@ -1,3 +1,96 @@
-﻿@{
-    ViewData["Title"] = "Add Car";
+﻿@using CarStore.Data.Models.Enums
+@model CarViewModel
+@{
+    ViewData["Title"] = "Добави Кола";
 }
+
+<div class="row">
+    <div class="col-md-offset-4 col-md-3">
+        <form method="post" class="form-horizontal" role="form">
+            <h4 class="text-center">@ViewData["Title"]</h4>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" name="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BrandName" class="control-label"></label>
+                <select asp-for="BrandName" asp-items="@Model.BrandsSelectList" class="form-control"></select>
+                <span asp-validation-for="BrandName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ModelName" class="control-label"></label>
+                <select asp-for="ModelName" asp-items="@Model.ModelsSelectList" class="form-control"></select>
+                <span asp-validation-for="ModelName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="YearOfManufacture" class="control-label"></label>
+                <input asp-for="YearOfManufacture" class="form-control" />
+                <span asp-validation-for="YearOfManufacture" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Color" class="control-label"></label>
+                <select class="form-control" asp-for="Color" asp-items="Html.GetEnumSelectList<Color>()"></select>
+                <span asp-validation-for="Color" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Mileage" class="control-label"></label>
+                <input asp-for="Mileage" class="form-control" />
+                <span asp-validation-for="Mileage" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Gearbox" class="control-label"></label>
+                <select class="form-control" asp-for="Gearbox" asp-items="Html.GetEnumSelectList<Gearbox>()"></select>
+                <span asp-validation-for="Gearbox" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EngineType" class="control-label"></label>
+                <select class="form-control" asp-for="EngineType" asp-items="Html.GetEnumSelectList<EngineType>()"></select>
+                <span asp-validation-for="EngineType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryName" class="control-label"></label>
+                <select asp-for="CategoryName" asp-items="@Model.CategoriesSelectList" class="form-control"></select>
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StoreCategoryName" class="control-label"></label>
+                <select asp-for="StoreCategoryName" asp-items="@Model.StoreCategoriesSelectList" class="form-control"></select>
+                <span asp-validation-for="StoreCategoryName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Създаване</button>
+            </div>
+        </form>
+    </div>
+</div>

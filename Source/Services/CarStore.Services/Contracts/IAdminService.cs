@@ -13,6 +13,14 @@ namespace CarStore.Services.Contracts
 
         Task AddDepartmentToDbAsync(Department department);
 
+        IEnumerable<Brand> GetAllBrandsInDb();
+
+        IEnumerable<Model> GetAllModelsInDb();
+
         IEnumerable<Department> GetAllDepartmentsInDb();
+
+        IEnumerable<StoreCategory> GetAllStoreCategoriesInDb();
+
+        IEnumerable<Category> GetAllCategoriesInDb();
     }
 }
