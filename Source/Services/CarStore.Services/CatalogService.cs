@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using CarStore.Data;
@@ -25,9 +26,36 @@ namespace CarStore.Services
                 .Include(c => c.Model)
                 .Include(c => c.CarCategories)
                 .ThenInclude(cc => cc.Category)
-                .Include(c => c.CarStoreCategories)
-                .ThenInclude(csc => csc.StoreCategory)
                 .AsEnumerable();
+        }
+
+        public IEnumerable<Car> GetAllCarsInStoreCategoryFromDb(string storeCategoryName)
+        {
+            var storeCategoryExists = this._carStoreDbContext.StoreCategories.Any(sc => sc.Name == storeCategoryName);
+
+            if (!storeCategoryExists)
+            {
+                throw new InvalidOperationException("The Store Category does not exist.");
+            }
+
+            var storeCategory = this._carStoreDbContext.StoreCategories
+                .Where(sc => sc.Name == storeCategoryName)
+                .Include(sc => sc.CarStoreCategories)
+                .ThenInclude(scc => scc.Car)
+                .ThenInclude(c => c.Brand)
+                .Include(sc => sc.CarStoreCategories)
+                .ThenInclude(scc => scc.Car)
+                .ThenInclude(c => c.Model)
+                .First();
+
+            var carsInStoreCategory = new List<Car>();
+
+            foreach (var carStoreCategory in storeCategory.CarStoreCategories)
+            {
+                carsInStoreCategory.Add(carStoreCategory.Car);
+            }
+
+            return carsInStoreCategory;
         }
 
         public byte[] GetCarImage(string carName)

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using CarStore.Data.Models;
 using CarStore.Services.Contracts;
 using CarStore.Web.ViewModels.Catalog;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarStore.Web.Controllers
@@ -16,9 +17,13 @@ namespace CarStore.Web.Controllers
             this._catalogService = catalogService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            var cars = this._catalogService.GetAllCarsFromDb();
+            this.ViewData["CurrentFilter"] = searchString;
+            
+            var cars = !string.IsNullOrEmpty(searchString) 
+                ? this._catalogService.GetAllCarsInStoreCategoryFromDb(searchString) 
+                : this._catalogService.GetAllCarsFromDb();
             var catalogCars = new List<CatalogCarViewModel>();
 
             foreach (var car in cars)
@@ -40,11 +45,6 @@ namespace CarStore.Web.Controllers
                 foreach (var carCategory in car.CarCategories)
                 {
                     catalogCar.CategoriesNames.Add(carCategory.Category.Name);
-                }
-
-                foreach (var carStoreCategory in car.CarStoreCategories)
-                {
-                    catalogCar.StoreCategoriesNames.Add(carStoreCategory.StoreCategory.Name);
                 }
 
                 catalogCars.Add(catalogCar);
