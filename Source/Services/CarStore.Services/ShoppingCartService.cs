@@ -9,6 +9,7 @@ using CarStore.Data.Models.Enums;
 using CarStore.Services.Contracts;
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarStore.Services
 {
@@ -23,28 +24,49 @@ namespace CarStore.Services
             this._carStoreDbContext = carStoreDbContext;
         }
 
-        public async Task CreateShoppingCart(ClaimsPrincipal currentUser)
+        public async Task<ShoppingCart> GetShoppingCart(ClaimsPrincipal currentUser)
         {
             var customer = await this._userManager.GetUserAsync(currentUser);
-            var shoppingCart = new ShoppingCart()
-            {
-                Customer = customer,
-                Status = Status.Created
-            };
-
-            await this._carStoreDbContext.ShoppingCarts.AddAsync(shoppingCart);
-            await this._carStoreDbContext.SaveChangesAsync();
-        }
-
-        public async Task AddItemToShoppingCart(int shoppingCartId, int customerId, ShoppingCartItem item)
-        {
             var shoppingCart =
-                this._carStoreDbContext.ShoppingCarts.FirstOrDefault(sc =>
-                    sc.Id == shoppingCartId && sc.CustomerId == customerId);
+                this._carStoreDbContext.ShoppingCarts
+                    .Include(sc => sc.Customer)
+                    .Include(sc => sc.ShoppingCartItems)
+                    .ThenInclude(sci => sci.Car)
+                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete
+                                                                        && sc.Status != Status.Deleted);
 
             if (shoppingCart == null)
             {
                 throw new InvalidOperationException("The shopping cart does not exist.");
+            }
+
+            return shoppingCart;
+        }
+
+        public async Task AddItemToShoppingCart(ClaimsPrincipal currentUser, ShoppingCartItem item)
+        {
+            var customer = await this._userManager.GetUserAsync(currentUser);
+            var shoppingCart =
+                this._carStoreDbContext.ShoppingCarts
+                    .Include(sc => sc.Customer)
+                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete);
+
+            if (shoppingCart == null)
+            {
+                shoppingCart = new ShoppingCart()
+                {
+                    Customer = customer,
+                    Status = Status.Created
+                };
+
+                await this._carStoreDbContext.ShoppingCarts.AddAsync(shoppingCart);
+                await this._carStoreDbContext.SaveChangesAsync();
+            }
+
+            var some = shoppingCart.ShoppingCartItems.Any(i => i.CarId == item.CarId);
+            if (shoppingCart.ShoppingCartItems.Any(i => i.CarId == item.CarId))
+            {
+                return;
             }
 
             shoppingCart.Status = Status.Incomplete;
@@ -54,19 +76,93 @@ namespace CarStore.Services
             await this._carStoreDbContext.SaveChangesAsync();
         }
 
-        public async Task RemoveItemToShoppingCart(int shoppingCartId, int customerId, ShoppingCartItem item)
+        public async Task UpdateQuantityOfShoppingCartItem(ClaimsPrincipal currentUser, int carId, decimal quantity)
         {
+            var customer = await this._userManager.GetUserAsync(currentUser);
             var shoppingCart =
-                this._carStoreDbContext.ShoppingCarts.FirstOrDefault(sc =>
-                    sc.Id == shoppingCartId && sc.CustomerId == customerId);
+                this._carStoreDbContext.ShoppingCarts
+                    .Include(sc => sc.Customer)
+                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete 
+                                                                        && sc.Status != Status.Deleted);
 
             if (shoppingCart == null)
             {
                 throw new InvalidOperationException("The shopping cart does not exist.");
             }
 
-            shoppingCart.Status = Status.Incomplete;
-            shoppingCart.ShoppingCartItems.Remove(item);
+            ShoppingCartItem itemToRemove = null;
+            foreach (var item in shoppingCart.ShoppingCartItems)
+            {
+                if (item.CarId == carId)
+                {
+                    if (quantity <= 0)
+                    {
+                        itemToRemove = item;
+                    }
+                    else
+                    {
+                        item.Quantity = quantity;
+                    }
+
+                    break;
+                }
+            }
+
+            if (itemToRemove != null)
+            {
+                shoppingCart.ShoppingCartItems.Remove(itemToRemove);
+            }
+
+            this._carStoreDbContext.ShoppingCarts.Update(shoppingCart);
+            await this._carStoreDbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveItemFromShoppingCart(ClaimsPrincipal currentUser, int carId)
+        {
+            var customer = await this._userManager.GetUserAsync(currentUser);
+            var shoppingCart =
+                this._carStoreDbContext.ShoppingCarts
+                    .Include(sc => sc.Customer)
+                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete);
+
+            if (shoppingCart == null)
+            {
+                throw new InvalidOperationException("The shopping cart does not exist.");
+            }
+
+            ShoppingCartItem itemToRemove = null;
+            foreach (var item in shoppingCart.ShoppingCartItems)
+            {
+                if (item.CarId == carId)
+                {
+                    itemToRemove = item;
+                    break;
+                }
+            }
+
+            if (itemToRemove != null)
+            {
+                shoppingCart.ShoppingCartItems.Remove(itemToRemove);
+            }
+
+            this._carStoreDbContext.ShoppingCarts.Update(shoppingCart);
+            await this._carStoreDbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveShoppingCart(ClaimsPrincipal currentUser)
+        {
+            var customer = await this._userManager.GetUserAsync(currentUser);
+            var shoppingCart =
+                this._carStoreDbContext.ShoppingCarts
+                    .Include(sc => sc.Customer)
+                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete);
+
+            if (shoppingCart == null)
+            {
+                throw new InvalidOperationException("The shopping cart does not exist.");
+            }
+
+            shoppingCart.Status = Status.Deleted;
 
             this._carStoreDbContext.ShoppingCarts.Update(shoppingCart);
             await this._carStoreDbContext.SaveChangesAsync();

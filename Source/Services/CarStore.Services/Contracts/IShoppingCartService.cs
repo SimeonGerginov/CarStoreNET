@@ -7,10 +7,14 @@ namespace CarStore.Services.Contracts
 {
     public interface IShoppingCartService
     {
-        Task CreateShoppingCart(ClaimsPrincipal currentUser);
+        Task<ShoppingCart> GetShoppingCart(ClaimsPrincipal currentUser);
 
-        Task AddItemToShoppingCart(int shoppingCartId, int customerId, ShoppingCartItem item);
+        Task AddItemToShoppingCart(ClaimsPrincipal currentUser, ShoppingCartItem item);
 
-        Task RemoveItemToShoppingCart(int shoppingCartId, int customerId, ShoppingCartItem item);
+        Task UpdateQuantityOfShoppingCartItem(ClaimsPrincipal currentUser, int carId, decimal quantity);
+
+        Task RemoveItemFromShoppingCart(ClaimsPrincipal currentUser, int carId);
+
+        Task RemoveShoppingCart(ClaimsPrincipal currentUser);
     }
 }
