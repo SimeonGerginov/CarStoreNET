@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+
 using CarStore.Services.Contracts;
 using CarStore.Web.ViewModels.Order;
 using CarStore.Web.ViewModels.ShoppingCart;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

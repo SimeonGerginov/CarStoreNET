@@ -40,6 +40,7 @@ namespace CarStore.Services
             var customer = await this._userManager.GetUserAsync(currentUser);
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
+                    .Include(sc => sc.ShoppingCartItems)
                     .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete);
 
             if (shoppingCart == null)

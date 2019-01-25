@@ -6,10 +6,10 @@
 <h2 class="text-center">Списък с поръчките</h2>
 @if (Model.Count() != 0)
 {
-    foreach (var order in Model)
-    {
-        <div class="row">
-            <div class="col-md-offset-4 col-md-3">
+    <div class="row">
+        @foreach (var order in Model)
+        {
+            <div class="col-md-offset-1 col-md-6" style="width: 25rem; border: 5px solid black; background-color:black">
                 <h4 class="text-center text-capitalize">Име на клиента: @order.FirstName</h4>
                 <h4 class="text-center text-capitalize">Фамилия на клиента: @order.LastName</h4>
                 <p class="text-center">Обща цена на поръчката: @order.TotalPrice лв</p>
@@ -21,8 +21,8 @@
                     <p class="text-center">Цена: @carItem.TotalPrice лв</p>
                 }
             </div>
-        </div>
-    }
+        }
+    </div>
 }
 else
 {

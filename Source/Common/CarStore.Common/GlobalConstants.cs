@@ -34,7 +34,7 @@
         public const int MinReviewLength = 20;
         public const int MaxReviewLength = 300;
 
-        public const int CarsPerPage = 1;
+        public const int CarsPerPage = 3;
 
         public const string ConnectionStringKey = "DefaultConnection";
         public const string JsonFile = "appsettings.json";

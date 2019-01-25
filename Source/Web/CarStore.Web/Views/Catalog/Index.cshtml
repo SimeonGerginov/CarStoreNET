@@ -12,7 +12,7 @@
         <p>
             Търсене по категория: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
             <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
+            <a asp-action="Index" class="active" style="color: white">Back to Full List</a>
         </p>
     </div>
 </form>
@@ -21,7 +21,7 @@
     @foreach (var catalogCar in Model)
     {
         <div class="col-md-4">
-            <div class="card" style="width: 18rem; border:5px solid black">
+            <div class="card" style="width: 18rem; border: 5px solid black; background-color: black">
                 <img class="card-img-top" style="width: 100%" src="@Url.Action("GetCarPhoto", "Catalog", new { area = "", carName = catalogCar.Name})" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title text-center">@catalogCar.Name</h5>
@@ -33,17 +33,20 @@
                     <p class="card-text text-center"><strong>Скоростна кутия: </strong>@catalogCar.Gearbox</p>
                     <p class="card-text text-center"><strong>Пробег: </strong>@catalogCar.Mileage</p>
                     <p class="card-text text-center"><strong>Година на производство: </strong>@catalogCar.YearOfManufacture</p>
-                    <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="AddItemToShoppingCart" method="post">
-                        <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-success">
-                            Добави в количка
-                        </button>
-                    </form>
-                    <br />
-                    <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="RemoveItemFromShoppingCart" method="post">
-                        <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-danger">
-                            Премахни от количка
-                        </button>
-                    </form>
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="AddItemToShoppingCart" method="post">
+                            <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-success">
+                                Добави в количка
+                            </button>
+                        </form>
+                        <br />
+                        <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="RemoveItemFromShoppingCart" method="post">
+                            <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-danger">
+                                Премахни от количка
+                            </button>
+                        </form>
+                    }
                     <br/>
                 </div>
             </div>
