@@ -50,6 +50,7 @@
                     @if (this.User.Identity.IsAuthenticated)
                     {
                         <li><a asp-area="" asp-controller="ShoppingCart" asp-action="ShoppingCart">Моята количка</a></li>
+                        <li><a asp-area="" asp-controller="Order" asp-action="Orders">Моите поръчки</a></li>
                     }
                 </ul>
                 

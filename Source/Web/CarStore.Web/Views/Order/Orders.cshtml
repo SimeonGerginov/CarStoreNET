@@ -1,0 +1,32 @@
+﻿@model IEnumerable<OrderViewModel>
+@{
+    ViewData["Title"] = "Поръчки";
+}
+
+<h2 class="text-center">Списък с поръчките</h2>
+@if (Model.Count() != 0)
+{
+    foreach (var order in Model)
+    {
+        <div class="row">
+            <div class="col-md-offset-4 col-md-3">
+                <h4 class="text-center text-capitalize">Име на клиента: @order.FirstName</h4>
+                <h4 class="text-center text-capitalize">Фамилия на клиента: @order.LastName</h4>
+                <p class="text-center">Обща цена на поръчката: @order.TotalPrice лв</p>
+                <p class="text-center">Дата на добавяне: @order.DateAdded.ToString("dd/MM/yyyy HH:mm")</p>
+                @foreach (var carItem in order.CarItems)
+                {
+                    <p class="text-center">Име на колата: @carItem.CarName</p>
+                    <p class="text-center">Количество: @carItem.Quantity</p>
+                    <p class="text-center">Цена: @carItem.TotalPrice лв</p>
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p class="text-center">
+        Нямате направени поръчки.
+    </p>
+}

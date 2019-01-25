@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -57,6 +58,19 @@ namespace CarStore.Services
             this._carStoreDbContext.ShoppingCarts.Update(shoppingCart);
             await this._carStoreDbContext.Orders.AddAsync(order);
             await this._carStoreDbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetAllOrdersOfCustomer(ClaimsPrincipal currentUser)
+        {
+            var customer = await this._userManager.GetUserAsync(currentUser);
+
+            return this._carStoreDbContext.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.ShoppingCart)
+                .ThenInclude(sc => sc.ShoppingCartItems)
+                .ThenInclude(sc => sc.Car)
+                .Where(o => o.CustomerId == customer.Id)
+                .AsEnumerable();
         }
     }
 }
