@@ -1,13 +1,13 @@
-﻿@model IEnumerable<CarItemViewModel>
+﻿@model ShoppingCartViewModel
 @{
     ViewData["Title"] = "Моята Количка";
 }
 
 <h2 class="text-center">Вашата текуща количка</h2>
 
-@if (Model.Count() != 0)
+@if (Model.CarItems.Count() != 0)
 {
-    foreach (var carItem in Model)
+    foreach (var carItem in Model.CarItems)
     {
         <div class="row">
             <div class="col-md-offset-4 col-md-3">
@@ -22,10 +22,24 @@
             </div>
         </div>
     }
+
+    <br/>
+    <form class="text-right" asp-area="" asp-controller="Order" asp-action="CreateOrder" method="post">
+        <button type="submit" name="shoppingCartId" value="@Model.ShoppingCartId" class="btn btn-default">
+            Завършване на поръчката
+        </button>
+    </form>
+    <br/>
+    <form class="text-right" asp-area="" asp-controller="ShoppingCart" asp-action="RemoveShoppingCart" method="post">
+        <button type="submit" name="shoppingCartId" value="@Model.ShoppingCartId" class="btn btn-danger">
+            Изтриване на поръчката
+        </button>
+    </form>
 }
 else
 {
-    <p class="text-center">Вашата количка е празна. Може да добавите коли от 
+    <p class="text-center">
+        Вашата количка е празна. Може да добавите коли от
         <a asp-area="" asp-controller="Home" asp-action="Index">Каталога.</a>
     </p>
 }

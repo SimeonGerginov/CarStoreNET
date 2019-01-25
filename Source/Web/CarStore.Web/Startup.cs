@@ -56,6 +56,7 @@ namespace CarStore.Web
             services.AddScoped(typeof(IFileConverter), typeof(FileConverter));
             services.AddScoped(typeof(ICatalogService), typeof(CatalogService));
             services.AddScoped(typeof(IShoppingCartService), typeof(ShoppingCartService));
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

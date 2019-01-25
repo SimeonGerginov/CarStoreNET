@@ -5,6 +5,6 @@ namespace CarStore.Services.Contracts
 {
     public interface IOrderService
     {
-        Task CreateOrder(ClaimsPrincipal currentUser, int shoppingCartId, decimal totalPrice);
+        Task CreateOrder(ClaimsPrincipal currentUser, int shoppingCartId);
     }
 }

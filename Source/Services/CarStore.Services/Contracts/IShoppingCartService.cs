@@ -15,6 +15,6 @@ namespace CarStore.Services.Contracts
 
         Task RemoveItemFromShoppingCart(ClaimsPrincipal currentUser, int carId);
 
-        Task RemoveShoppingCart(ClaimsPrincipal currentUser);
+        Task RemoveShoppingCart(ClaimsPrincipal currentUser, int shoppingCartId);
     }
 }

@@ -140,13 +140,13 @@ namespace CarStore.Services
             await this._carStoreDbContext.SaveChangesAsync();
         }
 
-        public async Task RemoveShoppingCart(ClaimsPrincipal currentUser)
+        public async Task RemoveShoppingCart(ClaimsPrincipal currentUser, int shoppingCartId)
         {
             var customer = await this._userManager.GetUserAsync(currentUser);
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
-                    .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete 
-                                                                        && sc.Status != Status.Deleted);
+                    .FirstOrDefault(sc => sc.Id == shoppingCartId && sc.CustomerId == customer.Id && sc.Status != Status.Complete 
+                                                                  && sc.Status != Status.Deleted);
 
             if (shoppingCart == null)
             {

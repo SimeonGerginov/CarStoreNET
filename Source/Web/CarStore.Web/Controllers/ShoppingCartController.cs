@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using CarStore.Data.Models;
 using CarStore.Services.Contracts;
 using CarStore.Web.ViewModels.ShoppingCart;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,10 +24,11 @@ namespace CarStore.Web.Controllers
         public async Task<IActionResult> ShoppingCart()
         {
             var shoppingCart = await this._shoppingCartService.GetShoppingCart(this.User);
-            var shoppingCartItems = new List<CarItemViewModel>();
+            var shoppingCartViewModel = new ShoppingCartViewModel();
 
             if (shoppingCart != null)
             {
+                shoppingCartViewModel.ShoppingCartId = shoppingCart.Id;
                 foreach (var shoppingCartItem in shoppingCart.ShoppingCartItems)
                 {
                     var carItemViewModel = new CarItemViewModel
@@ -38,11 +39,11 @@ namespace CarStore.Web.Controllers
                         TotalPrice = shoppingCartItem.Car.Price * shoppingCartItem.Quantity
                     };
 
-                    shoppingCartItems.Add(carItemViewModel);
+                    shoppingCartViewModel.CarItems.Add(carItemViewModel);
                 }
             }
 
-            return this.View(shoppingCartItems);
+            return this.View(shoppingCartViewModel);
         }
 
         [HttpPost]
@@ -74,9 +75,9 @@ namespace CarStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveShoppingCart()
+        public async Task<IActionResult> RemoveShoppingCart(int shoppingCartId)
         {
-            await this._shoppingCartService.RemoveShoppingCart(this.User);
+            await this._shoppingCartService.RemoveShoppingCart(this.User, shoppingCartId);
             return this.RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
