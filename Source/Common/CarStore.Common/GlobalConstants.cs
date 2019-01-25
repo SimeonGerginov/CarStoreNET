@@ -30,10 +30,19 @@
         public const int MinDepartmentName = 3;
         public const int MaxDepartmentName = 25;
 
+        // Review Constants
+        public const int MinReviewLength = 20;
+        public const int MaxReviewLength = 300;
+
+        public const int CarsPerPage = 3;
+
         public const string ConnectionStringKey = "DefaultConnection";
         public const string JsonFile = "appsettings.json";
 
         public const string LoginErrorKey = "1";
         public const string LoginErrorMessage = "Invalid login attempt.";
+
+        // Roles
+        public const string AdminRole = "Administrator";
     }
 }

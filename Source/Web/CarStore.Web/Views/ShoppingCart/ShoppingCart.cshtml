@@ -1,0 +1,45 @@
+﻿@model ShoppingCartViewModel
+@{
+    ViewData["Title"] = "Моята Количка";
+}
+
+<h2 class="text-center">Вашата текуща количка</h2>
+
+@if (Model.CarItems.Count() != 0)
+{
+    foreach (var carItem in Model.CarItems)
+    {
+        <div class="row">
+            <div class="col-md-offset-4 col-md-3">
+                <h4 class="text-center text-capitalize">@carItem.CarName</h4>
+                <p class="text-center">Обща цена: @carItem.TotalPrice</p>
+                <form asp-area="" asp-controller="ShoppingCart" asp-action="UpdateQuantityOfShoppingCartItem" method="post">
+                    Количество: <input type="text" name="quantity" value="@carItem.Quantity" class="form-control" />
+                    <button type="submit" name="carId" value="@carItem.CarId" class="btn btn-success">
+                        Добавяне
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+
+    <br/>
+    <form class="text-right" asp-area="" asp-controller="Order" asp-action="CreateOrder" method="post">
+        <button type="submit" name="shoppingCartId" value="@Model.ShoppingCartId" class="btn btn-default">
+            Завършване на поръчката
+        </button>
+    </form>
+    <br/>
+    <form class="text-right" asp-area="" asp-controller="ShoppingCart" asp-action="RemoveShoppingCart" method="post">
+        <button type="submit" name="shoppingCartId" value="@Model.ShoppingCartId" class="btn btn-danger">
+            Изтриване на поръчката
+        </button>
+    </form>
+}
+else
+{
+    <p class="text-center">
+        Вашата количка е празна. Може да добавите коли от
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="active" style="color: blue">Каталога.</a>
+    </p>
+}

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
+using CarStore.Common;
 using CarStore.Data.Models;
 using CarStore.Services.Contracts;
 using CarStore.Web.ViewModels.Admin;
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarStore.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = GlobalConstants.AdminRole)]
     public class AdminController : BaseController
     {
         private readonly IAdminService _adminService;

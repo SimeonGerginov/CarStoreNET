@@ -1,28 +1,57 @@
-﻿@model IEnumerable<CatalogCarViewModel>
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core
+@model IPagedList<CatalogCarViewModel>
 @{
     ViewData["Title"] = "Каталог";
 }
 
-<h2>Каталог с коли</h2>
+<h2 class="text-center">Каталог с коли</h2>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Търсене по категория: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index" class="active" style="color: white">Back to Full List</a>
+        </p>
+    </div>
+</form>
 
 <div class="row">
     @foreach (var catalogCar in Model)
     {
-        <div class="col-md-2">
-            <div class="card" style="width: 18rem;">
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem; border: 5px solid black; background-color: black">
                 <img class="card-img-top" style="width: 100%" src="@Url.Action("GetCarPhoto", "Catalog", new { area = "", carName = catalogCar.Name})" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">@catalogCar.Name</h5>
-                    <p class="card-text">@catalogCar.Description</p>
-                    <p class="card-text"><strong>Марка: </strong>@catalogCar.BrandName</p>
-                    <p class="card-text"><strong>Модел: </strong>@catalogCar.ModelName</p>
-                    <p class="card-text"><strong>Цена: </strong>@catalogCar.Price</p>
-                    <p class="card-text"><strong>Тип двигател: </strong>@catalogCar.EngineType</p>
-                    <p class="card-text"><strong>Скоростна кутия: </strong>@catalogCar.Gearbox</p>
-                    <p class="card-text"><strong>Пробег: </strong>@catalogCar.Mileage</p>
-                    <p class="card-text"><strong>Година на производство: </strong>@catalogCar.YearOfManufacture</p>
+                    <h5 class="card-title text-center">@catalogCar.Name</h5>
+                    <p class="card-text text-center">@catalogCar.Description</p>
+                    <p class="card-text text-center"><strong>Марка: </strong>@catalogCar.BrandName</p>
+                    <p class="card-text text-center"><strong>Модел: </strong>@catalogCar.ModelName</p>
+                    <p class="card-text text-center"><strong>Цена: </strong>@catalogCar.Price</p>
+                    <p class="card-text text-center"><strong>Тип двигател: </strong>@catalogCar.EngineType</p>
+                    <p class="card-text text-center"><strong>Скоростна кутия: </strong>@catalogCar.Gearbox</p>
+                    <p class="card-text text-center"><strong>Пробег: </strong>@catalogCar.Mileage</p>
+                    <p class="card-text text-center"><strong>Година на производство: </strong>@catalogCar.YearOfManufacture</p>
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="AddItemToShoppingCart" method="post">
+                            <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-success">
+                                Добави в количка
+                            </button>
+                        </form>
+                        <br />
+                        <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="RemoveItemFromShoppingCart" method="post">
+                            <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-danger">
+                                Премахни от количка
+                            </button>
+                        </form>
+                    }
+                    <br/>
                 </div>
             </div>
         </div>
     }
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using CarStore.Common;
+using CarStore.Data.Models;
 using CarStore.Services.Contracts;
 using CarStore.Web.ViewModels.Catalog;
+
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace CarStore.Web.Controllers
 {
@@ -16,15 +19,20 @@ namespace CarStore.Web.Controllers
             this._catalogService = catalogService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchString, int? page)
         {
-            var cars = this._catalogService.GetAllCarsFromDb();
+            this.ViewData["CurrentFilter"] = searchString;
+            
+            var cars = !string.IsNullOrEmpty(searchString) 
+                ? this._catalogService.GetAllCarsInStoreCategoryFromDb(searchString) 
+                : this._catalogService.GetAllCarsFromDb();
             var catalogCars = new List<CatalogCarViewModel>();
 
             foreach (var car in cars)
             {
                 var catalogCar = new CatalogCarViewModel()
                 {
+                    Id = car.Id,
                     Name = car.Name,
                     Description = car.Description,
                     Price = car.Price,
@@ -42,15 +50,13 @@ namespace CarStore.Web.Controllers
                     catalogCar.CategoriesNames.Add(carCategory.Category.Name);
                 }
 
-                foreach (var carStoreCategory in car.CarStoreCategories)
-                {
-                    catalogCar.StoreCategoriesNames.Add(carStoreCategory.StoreCategory.Name);
-                }
-
                 catalogCars.Add(catalogCar);
             }
 
-            return this.View(catalogCars);
+            var pageNumber = page ?? 1;
+            var carsPerPage = catalogCars.ToPagedList(pageNumber, GlobalConstants.CarsPerPage);
+
+            return this.View(carsPerPage);
         }
 
         public FileContentResult GetCarPhoto(string carName)

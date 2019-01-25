@@ -7,6 +7,8 @@ namespace CarStore.Services.Contracts
     {
         IEnumerable<Car> GetAllCarsFromDb();
 
+        IEnumerable<Car> GetAllCarsInStoreCategoryFromDb(string storeCategoryName);
+
         byte[] GetCarImage(string carName);
     }
 }

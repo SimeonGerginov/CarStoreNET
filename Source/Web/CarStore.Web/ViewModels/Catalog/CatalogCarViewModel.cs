@@ -8,8 +8,9 @@ namespace CarStore.Web.ViewModels.Catalog
         public CatalogCarViewModel()
         {
             this.CategoriesNames = new HashSet<string>();
-            this.StoreCategoriesNames = new HashSet<string>();
         }
+
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -32,7 +33,5 @@ namespace CarStore.Web.ViewModels.Catalog
         public EngineType EngineType { get; set; }
         
         public ICollection<string> CategoriesNames { get; set; }
-        
-        public ICollection<string> StoreCategoriesNames { get; set; }
     }
 }
