@@ -49,27 +49,6 @@ namespace CarStore.Data
                 entity.HasOne(csc => csc.Car).WithMany(sc => sc.CarStoreCategories).HasForeignKey(csc => csc.CarId);
                 entity.HasOne(csc => csc.StoreCategory).WithMany(c => c.CarStoreCategories).HasForeignKey(csc => csc.StoreCategoryId);
             });
-
-            /* builder.Entity<Order>(entity => 
-            {
-                entity.HasKey(o => new
-                {
-                    o.CustomerId, o.ShoppingCartId
-                });
-            }); */
-
-            /* builder.Entity<ShoppingCart>(entity =>
-            {
-                entity.HasKey(sc => new
-                {
-                    sc.Id, sc.CustomerId
-                }); 
-            }); */
-
-            /* builder.Entity<ShoppingCartItem>(entity =>
-            {
-                entity.HasKey(sci => sci.CarId); 
-            }); */
         }
     }
 }

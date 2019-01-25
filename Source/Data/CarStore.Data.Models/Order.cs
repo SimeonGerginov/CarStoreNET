@@ -12,7 +12,7 @@ namespace CarStore.Data.Models
 
         public ShoppingCart ShoppingCart { get; set; }
         
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
 
         public Customer Customer { get; set; }
 

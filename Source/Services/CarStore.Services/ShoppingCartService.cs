@@ -29,7 +29,6 @@ namespace CarStore.Services
             var customer = await this._userManager.GetUserAsync(currentUser);
             
             return this._carStoreDbContext.ShoppingCarts
-                .Include(sc => sc.Customer)
                 .Include(sc => sc.ShoppingCartItems)
                 .ThenInclude(sci => sci.Car)
                 .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete
@@ -41,7 +40,6 @@ namespace CarStore.Services
             var customer = await this._userManager.GetUserAsync(currentUser);
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
-                    .Include(sc => sc.Customer)
                     .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete);
 
             if (shoppingCart == null)
@@ -73,7 +71,6 @@ namespace CarStore.Services
             var customer = await this._userManager.GetUserAsync(currentUser);
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
-                    .Include(sc => sc.Customer)
                     .Include(sc => sc.ShoppingCartItems)
                     .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete 
                                                                         && sc.Status != Status.Deleted);
@@ -115,8 +112,9 @@ namespace CarStore.Services
             var customer = await this._userManager.GetUserAsync(currentUser);
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
-                    .Include(sc => sc.Customer)
-                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete);
+                    .Include(sc => sc.ShoppingCartItems)
+                    .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete 
+                                                                       && sc.Status != Status.Deleted);
 
             if (shoppingCart == null)
             {
@@ -147,8 +145,8 @@ namespace CarStore.Services
             var customer = await this._userManager.GetUserAsync(currentUser);
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
-                    .Include(sc => sc.Customer)
-                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete);
+                    .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete 
+                                                                        && sc.Status != Status.Deleted);
 
             if (shoppingCart == null)
             {

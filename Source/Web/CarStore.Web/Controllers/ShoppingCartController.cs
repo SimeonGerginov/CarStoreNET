@@ -66,18 +66,18 @@ namespace CarStore.Web.Controllers
             return this.RedirectToAction(nameof(ShoppingCartController.ShoppingCart), "ShoppingCart");
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> RemoveItemFromShoppingCart(int carId)
         {
             await this._shoppingCartService.RemoveItemFromShoppingCart(this.User, carId);
-            return this.Ok();
+            return this.RedirectToAction(nameof(ShoppingCartController.ShoppingCart), "ShoppingCart");
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> RemoveShoppingCart()
         {
             await this._shoppingCartService.RemoveShoppingCart(this.User);
-            return this.Ok();
+            return this.RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }
