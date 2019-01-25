@@ -41,5 +41,8 @@
 
         public const string LoginErrorKey = "1";
         public const string LoginErrorMessage = "Invalid login attempt.";
+
+        // Roles
+        public const string AdminRole = "Administrator";
     }
 }

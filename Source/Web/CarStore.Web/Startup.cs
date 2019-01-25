@@ -72,6 +72,10 @@ namespace CarStore.Web
                     dbContext.Database.Migrate();
                 }
 
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<Customer>>();
+
+                new UserSeeder(roleManager, userManager).SeedAsync(dbContext).GetAwaiter().GetResult();
                 new CarStoreDbContextSeeder().SeedAsync(dbContext).GetAwaiter().GetResult();
             }
 

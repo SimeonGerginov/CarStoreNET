@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using CarStore.Common
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -31,6 +33,12 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Начална страница</a></li>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole(GlobalConstants.AdminRole))
+                    {
+                        <li><a asp-area="" asp-controller="Admin" asp-action="AddDepartment">Добави Отдел</a></li>
+                        <li><a asp-area="" asp-controller="Admin" asp-action="AddStoreCategory">Добави Категория</a></li>
+                        <li><a asp-area="" asp-controller="Admin" asp-action="AddCar">Добави Кола</a></li>
+                    }
                 </ul>
                 
                 <ul class="nav navbar-nav navbar-right">
