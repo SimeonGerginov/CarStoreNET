@@ -1,0 +1,31 @@
+﻿@model IEnumerable<CarItemViewModel>
+@{
+    ViewData["Title"] = "Моята Количка";
+}
+
+<h2 class="text-center">Вашата текуща количка</h2>
+
+@if (Model.Count() != 0)
+{
+    foreach (var carItem in Model)
+    {
+        <div class="row">
+            <div class="col-md-offset-4 col-md-3">
+                <h4 class="text-center text-capitalize">@carItem.CarName</h4>
+                <p class="text-center">Обща цена: @carItem.TotalPrice</p>
+                <form asp-area="" asp-controller="ShoppingCart" asp-action="UpdateQuantityOfShoppingCartItem" method="post">
+                    Количество: <input type="text" name="quantity" value="@carItem.Quantity" class="form-control" />
+                    <button type="submit" name="carId" value="@carItem.CarId" class="btn btn-success">
+                        Добавяне
+                    </button>
+                </form>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p class="text-center">Вашата количка е празна. Може да добавите коли от 
+        <a asp-area="" asp-controller="Home" asp-action="Index">Каталога.</a>
+    </p>
+}

@@ -50,26 +50,26 @@ namespace CarStore.Data
                 entity.HasOne(csc => csc.StoreCategory).WithMany(c => c.CarStoreCategories).HasForeignKey(csc => csc.StoreCategoryId);
             });
 
-            builder.Entity<Order>(entity => 
+            /* builder.Entity<Order>(entity => 
             {
                 entity.HasKey(o => new
                 {
                     o.CustomerId, o.ShoppingCartId
                 });
-            });
+            }); */
 
-            builder.Entity<ShoppingCart>(entity =>
+            /* builder.Entity<ShoppingCart>(entity =>
             {
                 entity.HasKey(sc => new
                 {
                     sc.Id, sc.CustomerId
                 }); 
-            });
+            }); */
 
-            builder.Entity<ShoppingCartItem>(entity =>
+            /* builder.Entity<ShoppingCartItem>(entity =>
             {
                 entity.HasKey(sci => sci.CarId); 
-            });
+            }); */
         }
     }
 }

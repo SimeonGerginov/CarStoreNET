@@ -5,8 +5,6 @@
     ViewData["Title"] = "Каталог";
 }
 
-<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
-
 <h2 class="text-center">Каталог с коли</h2>
 
 <form asp-action="Index" method="get">
@@ -22,7 +20,7 @@
 <div class="row">
     @foreach (var catalogCar in Model)
     {
-        <div class="col-md-2">
+        <div class="col-md-4">
             <div class="card" style="width: 18rem; border:5px solid black">
                 <img class="card-img-top" style="width: 100%" src="@Url.Action("GetCarPhoto", "Catalog", new { area = "", carName = catalogCar.Name})" alt="Card image cap">
                 <div class="card-body">
@@ -35,6 +33,18 @@
                     <p class="card-text text-center"><strong>Скоростна кутия: </strong>@catalogCar.Gearbox</p>
                     <p class="card-text text-center"><strong>Пробег: </strong>@catalogCar.Mileage</p>
                     <p class="card-text text-center"><strong>Година на производство: </strong>@catalogCar.YearOfManufacture</p>
+                    <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="AddItemToShoppingCart" method="post">
+                        <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-success">
+                            Добави в количка
+                        </button>
+                    </form>
+                    <br />
+                    <form class="text-center" asp-area="" asp-controller="ShoppingCart" asp-action="RemoveItemFromShoppingCart" method="post">
+                        <button type="submit" name="carId" value="@catalogCar.Id" class="btn btn-danger">
+                            Премахни от количка
+                        </button>
+                    </form>
+                    <br/>
                 </div>
             </div>
         </div>

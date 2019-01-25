@@ -217,25 +217,25 @@ namespace CarStore.Data.Migrations
 
             modelBuilder.Entity("CarStore.Data.Models.Order", b =>
                 {
-                    b.Property<int>("CustomerId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ShoppingCartId");
+                    b.Property<int>("CustomerId");
 
                     b.Property<string>("CustomerId1");
 
                     b.Property<DateTime>("DateAdded");
 
-                    b.Property<int?>("ShoppingCartCustomerId");
-
-                    b.Property<int?>("ShoppingCartId1");
+                    b.Property<int>("ShoppingCartId");
 
                     b.Property<decimal>("TotalPrice");
 
-                    b.HasKey("CustomerId", "ShoppingCartId");
+                    b.HasKey("Id");
 
                     b.HasIndex("CustomerId1");
 
-                    b.HasIndex("ShoppingCartId1", "ShoppingCartCustomerId");
+                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("Orders");
                 });
@@ -269,44 +269,40 @@ namespace CarStore.Data.Migrations
 
             modelBuilder.Entity("CarStore.Data.Models.ShoppingCart", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CustomerId");
-
-                    b.Property<string>("CustomerId1");
+                    b.Property<string>("CustomerId");
 
                     b.Property<int>("Status");
 
-                    b.HasKey("Id", "CustomerId");
+                    b.HasKey("Id");
 
-                    b.HasAlternateKey("CustomerId", "Id");
-
-                    b.HasIndex("CustomerId1");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("CarStore.Data.Models.ShoppingCartItem", b =>
                 {
-                    b.Property<int>("CarId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CarId1");
+                    b.Property<int>("CarId");
 
                     b.Property<DateTime>("DateAdded");
 
                     b.Property<decimal>("Quantity");
 
-                    b.Property<int?>("ShoppingCartCustomerId");
-
                     b.Property<int?>("ShoppingCartId");
 
-                    b.HasKey("CarId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("CarId1");
+                    b.HasIndex("CarId");
 
-                    b.HasIndex("ShoppingCartId", "ShoppingCartCustomerId");
+                    b.HasIndex("ShoppingCartId");
 
                     b.ToTable("ShoppingCartItems");
                 });
@@ -496,7 +492,8 @@ namespace CarStore.Data.Migrations
 
                     b.HasOne("CarStore.Data.Models.ShoppingCart", "ShoppingCart")
                         .WithMany()
-                        .HasForeignKey("ShoppingCartId1", "ShoppingCartCustomerId");
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CarStore.Data.Models.Review", b =>
@@ -515,18 +512,19 @@ namespace CarStore.Data.Migrations
                 {
                     b.HasOne("CarStore.Data.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId1");
+                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("CarStore.Data.Models.ShoppingCartItem", b =>
                 {
                     b.HasOne("CarStore.Data.Models.Car", "Car")
                         .WithMany()
-                        .HasForeignKey("CarId1");
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CarStore.Data.Models.ShoppingCart")
                         .WithMany("ShoppingCartItems")
-                        .HasForeignKey("ShoppingCartId", "ShoppingCartCustomerId");
+                        .HasForeignKey("ShoppingCartId");
                 });
 
             modelBuilder.Entity("CarStore.Data.Models.StoreCategory", b =>

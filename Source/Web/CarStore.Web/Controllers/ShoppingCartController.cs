@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using CarStore.Data.Models;
 using CarStore.Services.Contracts;
-
+using CarStore.Web.ViewModels.ShoppingCart;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,13 +21,31 @@ namespace CarStore.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetShoppingCart()
+        public async Task<IActionResult> ShoppingCart()
         {
             var shoppingCart = await this._shoppingCartService.GetShoppingCart(this.User);
-            return this.View(shoppingCart);
+            var shoppingCartItems = new List<CarItemViewModel>();
+
+            if (shoppingCart != null)
+            {
+                foreach (var shoppingCartItem in shoppingCart.ShoppingCartItems)
+                {
+                    var carItemViewModel = new CarItemViewModel
+                    {
+                        CarId = shoppingCartItem.Car.Id,
+                        CarName = shoppingCartItem.Car.Name,
+                        Quantity = shoppingCartItem.Quantity,
+                        TotalPrice = shoppingCartItem.Car.Price * shoppingCartItem.Quantity
+                    };
+
+                    shoppingCartItems.Add(carItemViewModel);
+                }
+            }
+
+            return this.View(shoppingCartItems);
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> AddItemToShoppingCart(int carId)
         {
             var shoppingCartItem = new ShoppingCartItem
@@ -37,14 +56,14 @@ namespace CarStore.Web.Controllers
             };
 
             await this._shoppingCartService.AddItemToShoppingCart(this.User, shoppingCartItem);
-            return this.Ok();
+            return this.RedirectToAction(nameof(ShoppingCartController.ShoppingCart), "ShoppingCart");
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> UpdateQuantityOfShoppingCartItem(int carId, decimal quantity)
         {
             await this._shoppingCartService.UpdateQuantityOfShoppingCartItem(this.User, carId, quantity);
-            return this.Ok();
+            return this.RedirectToAction(nameof(ShoppingCartController.ShoppingCart), "ShoppingCart");
         }
 
         [HttpDelete]

@@ -27,20 +27,13 @@ namespace CarStore.Services
         public async Task<ShoppingCart> GetShoppingCart(ClaimsPrincipal currentUser)
         {
             var customer = await this._userManager.GetUserAsync(currentUser);
-            var shoppingCart =
-                this._carStoreDbContext.ShoppingCarts
-                    .Include(sc => sc.Customer)
-                    .Include(sc => sc.ShoppingCartItems)
-                    .ThenInclude(sci => sci.Car)
-                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete
-                                                                        && sc.Status != Status.Deleted);
-
-            if (shoppingCart == null)
-            {
-                throw new InvalidOperationException("The shopping cart does not exist.");
-            }
-
-            return shoppingCart;
+            
+            return this._carStoreDbContext.ShoppingCarts
+                .Include(sc => sc.Customer)
+                .Include(sc => sc.ShoppingCartItems)
+                .ThenInclude(sci => sci.Car)
+                .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete
+                                                                    && sc.Status != Status.Deleted);
         }
 
         public async Task AddItemToShoppingCart(ClaimsPrincipal currentUser, ShoppingCartItem item)
@@ -49,13 +42,13 @@ namespace CarStore.Services
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
                     .Include(sc => sc.Customer)
-                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete);
+                    .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete);
 
             if (shoppingCart == null)
             {
                 shoppingCart = new ShoppingCart()
                 {
-                    Customer = customer,
+                    CustomerId = customer.Id,
                     Status = Status.Created
                 };
 
@@ -63,7 +56,6 @@ namespace CarStore.Services
                 await this._carStoreDbContext.SaveChangesAsync();
             }
 
-            var some = shoppingCart.ShoppingCartItems.Any(i => i.CarId == item.CarId);
             if (shoppingCart.ShoppingCartItems.Any(i => i.CarId == item.CarId))
             {
                 return;
@@ -82,7 +74,8 @@ namespace CarStore.Services
             var shoppingCart =
                 this._carStoreDbContext.ShoppingCarts
                     .Include(sc => sc.Customer)
-                    .FirstOrDefault(sc => sc.Customer.Id == customer.Id && sc.Status != Status.Complete 
+                    .Include(sc => sc.ShoppingCartItems)
+                    .FirstOrDefault(sc => sc.CustomerId == customer.Id && sc.Status != Status.Complete 
                                                                         && sc.Status != Status.Deleted);
 
             if (shoppingCart == null)

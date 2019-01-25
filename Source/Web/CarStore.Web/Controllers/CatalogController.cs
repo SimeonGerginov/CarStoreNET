@@ -32,6 +32,7 @@ namespace CarStore.Web.Controllers
             {
                 var catalogCar = new CatalogCarViewModel()
                 {
+                    Id = car.Id,
                     Name = car.Name,
                     Description = car.Description,
                     Price = car.Price,

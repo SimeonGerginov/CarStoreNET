@@ -6,11 +6,12 @@ namespace CarStore.Data.Models
     public class Order
     {
         [Key]
+        public int Id { get; set; }
+
         public int ShoppingCartId { get; set; }
 
         public ShoppingCart ShoppingCart { get; set; }
-
-        [Key]
+        
         public int CustomerId { get; set; }
 
         public Customer Customer { get; set; }
