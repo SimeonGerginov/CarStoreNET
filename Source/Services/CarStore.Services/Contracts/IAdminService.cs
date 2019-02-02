@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using CarStore.Data.Models;
+using CarStore.Data.Models.Enums;
 
 namespace CarStore.Services.Contracts
 {
@@ -22,5 +24,11 @@ namespace CarStore.Services.Contracts
         IEnumerable<StoreCategory> GetAllStoreCategoriesInDb();
 
         IEnumerable<Category> GetAllCategoriesInDb();
+
+        IEnumerable<Order> GetNotProcessedOrders();
+
+        Task UpdateOrderStatus(int orderId, OrderStatus status);
+
+        IEnumerable<Order> GetApprovedOrdersInInterval(DateTime startDate, DateTime endDate);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
+using CarStore.Data.Models.Enums;
+
 namespace CarStore.Data.Models
 {
     public class Order
@@ -20,5 +22,8 @@ namespace CarStore.Data.Models
         public decimal TotalPrice { get; set; }
 
         public DateTime DateAdded { get; set; }
+
+        [Required]
+        public OrderStatus Status { get; set; }
     }
 }

@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 using CarStore.Data;
 using CarStore.Data.Models;
+using CarStore.Data.Models.Enums;
 using CarStore.Services.Contracts;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace CarStore.Services
 {
@@ -130,6 +133,53 @@ namespace CarStore.Services
         public IEnumerable<Category> GetAllCategoriesInDb()
         {
             return this._carStoreDbContext.Categories.AsEnumerable();
+        }
+
+        public IEnumerable<Order> GetNotProcessedOrders()
+        {
+            return this._carStoreDbContext.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.ShoppingCart)
+                .ThenInclude(sc => sc.ShoppingCartItems)
+                .ThenInclude(sc => sc.Car)
+                .Where(o => o.Status == OrderStatus.NotProcessed)
+                .AsEnumerable();
+        }
+
+        public async Task UpdateOrderStatus(int orderId, OrderStatus status)
+        {
+            var order = this._carStoreDbContext.Orders
+                .FirstOrDefault(o => o.Id == orderId && o.Status == OrderStatus.NotProcessed);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException("The order could not be found.");
+            }
+
+            order.Status = status;
+
+            this._carStoreDbContext.Orders.Update(order);
+            await this._carStoreDbContext.SaveChangesAsync();
+        }
+
+        public IEnumerable<Order> GetApprovedOrdersInInterval(DateTime startDate, DateTime endDate)
+        {
+            if (startDate == default(DateTime) || endDate == default(DateTime))
+            {
+                return new List<Order>();
+            }
+
+            return this._carStoreDbContext.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.ShoppingCart)
+                .ThenInclude(sc => sc.ShoppingCartItems)
+                .ThenInclude(sc => sc.Car)
+                .Where(o => o.Status == OrderStatus.Approved 
+                            && o.DateAdded.Date >= startDate.Date && o.DateAdded.Month >= startDate.Month
+                            && o.DateAdded.Day >= startDate.Day && o.DateAdded.Date <= endDate.Date
+                            && o.DateAdded.Month <= endDate.Month && o.DateAdded.Day <= endDate.Day)
+                .OrderBy(o => o.DateAdded)
+                .AsEnumerable();
         }
     }
 }
