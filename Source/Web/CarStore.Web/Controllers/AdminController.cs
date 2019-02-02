@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using CarStore.Common;
 using CarStore.Data.Models;
+using CarStore.Data.Models.Enums;
 using CarStore.Services.Contracts;
 using CarStore.Web.ViewModels.Admin;
+using CarStore.Web.ViewModels.Order;
+using CarStore.Web.ViewModels.ShoppingCart;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -147,6 +151,48 @@ namespace CarStore.Web.Controllers
 
             // If we got this far, something failed, redisplay form.
             return this.View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Orders()
+        {
+            var orders = this._adminService.GetNotProcessedOrders();
+            var ordersViewModel = new List<OrderViewModel>();
+
+            foreach (var order in orders)
+            {
+                var orderViewModel = new OrderViewModel
+                {
+                    FirstName = order.Customer.FirstName,
+                    LastName = order.Customer.LastName,
+                    TotalPrice = order.TotalPrice,
+                    DateAdded = order.DateAdded
+                };
+
+                foreach (var shoppingCartItem in order.ShoppingCart.ShoppingCartItems)
+                {
+                    var carItemViewModel = new CarItemViewModel
+                    {
+                        CarId = shoppingCartItem.CarId,
+                        CarName = shoppingCartItem.Car.Name,
+                        Quantity = shoppingCartItem.Quantity,
+                        TotalPrice = shoppingCartItem.Car.Price * shoppingCartItem.Quantity
+                    };
+
+                    orderViewModel.CarItems.Add(carItemViewModel);
+                }
+
+                ordersViewModel.Add(orderViewModel);
+            }
+
+            return this.View(ordersViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangeOrderStatus(OrderStatus orderStatus)
+        {
+            return this.RedirectToAction(nameof(AdminController.Orders), "Admin");
         }
     }
 }

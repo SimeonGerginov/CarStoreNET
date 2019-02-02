@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 using CarStore.Data;
 using CarStore.Data.Models;
+using CarStore.Data.Models.Enums;
 using CarStore.Services.Contracts;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace CarStore.Services
 {
@@ -130,6 +133,17 @@ namespace CarStore.Services
         public IEnumerable<Category> GetAllCategoriesInDb()
         {
             return this._carStoreDbContext.Categories.AsEnumerable();
+        }
+
+        public IEnumerable<Order> GetNotProcessedOrders()
+        {
+            return this._carStoreDbContext.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.ShoppingCart)
+                .ThenInclude(sc => sc.ShoppingCartItems)
+                .ThenInclude(sc => sc.Car)
+                .Where(o => o.Status == OrderStatus.NotProcessed)
+                .AsEnumerable();
         }
     }
 }

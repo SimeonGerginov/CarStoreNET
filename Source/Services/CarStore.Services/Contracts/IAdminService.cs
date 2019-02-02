@@ -22,5 +22,7 @@ namespace CarStore.Services.Contracts
         IEnumerable<StoreCategory> GetAllStoreCategoriesInDb();
 
         IEnumerable<Category> GetAllCategoriesInDb();
+
+        IEnumerable<Order> GetNotProcessedOrders();
     }
 }
