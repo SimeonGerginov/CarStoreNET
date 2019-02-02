@@ -163,6 +163,7 @@ namespace CarStore.Web.Controllers
             {
                 var orderViewModel = new OrderViewModel
                 {
+                    Id = order.Id,
                     FirstName = order.Customer.FirstName,
                     LastName = order.Customer.LastName,
                     TotalPrice = order.TotalPrice,
@@ -190,8 +191,9 @@ namespace CarStore.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ChangeOrderStatus(OrderStatus orderStatus)
+        public async Task<IActionResult> ChangeOrderStatus(int orderId, OrderStatus orderStatus)
         {
+            await this._adminService.UpdateOrderStatus(orderId, orderStatus);
             return this.RedirectToAction(nameof(AdminController.Orders), "Admin");
         }
     }

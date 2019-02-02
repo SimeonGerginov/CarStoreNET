@@ -22,11 +22,13 @@
                     <p class="text-center">Цена: @carItem.TotalPrice лв</p>
                 }
                 <form asp-area="" asp-controller="Admin" asp-action="ChangeOrderStatus" class="col-md-1" method="post">
+                    <input name="orderId" asp-for="@order.Id" type="hidden" />
                     <button type="submit" name="orderStatus" value="@OrderStatus.Approved" class="btn btn-success">
                         Одобряване
                     </button>
                 </form>
                 <form asp-area="" asp-controller="Admin" asp-action="ChangeOrderStatus" class="col-md-offset-7" method="post">
+                    <input name="orderId" asp-for="@order.Id" type="hidden" />
                     <button type="submit" name="orderStatus" value="@OrderStatus.Rejected" class="btn btn-danger">
                         Отхвърляне
                     </button>

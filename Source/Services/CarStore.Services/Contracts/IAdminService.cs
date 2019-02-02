@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using CarStore.Data.Models;
+using CarStore.Data.Models.Enums;
 
 namespace CarStore.Services.Contracts
 {
@@ -24,5 +25,7 @@ namespace CarStore.Services.Contracts
         IEnumerable<Category> GetAllCategoriesInDb();
 
         IEnumerable<Order> GetNotProcessedOrders();
+
+        Task UpdateOrderStatus(int orderId, OrderStatus status);
     }
 }

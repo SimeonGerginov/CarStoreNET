@@ -145,5 +145,21 @@ namespace CarStore.Services
                 .Where(o => o.Status == OrderStatus.NotProcessed)
                 .AsEnumerable();
         }
+
+        public async Task UpdateOrderStatus(int orderId, OrderStatus status)
+        {
+            var order = this._carStoreDbContext.Orders
+                .FirstOrDefault(o => o.Id == orderId && o.Status == OrderStatus.NotProcessed);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException("The order could not be found.");
+            }
+
+            order.Status = status;
+
+            this._carStoreDbContext.Orders.Update(order);
+            await this._carStoreDbContext.SaveChangesAsync();
+        }
     }
 }

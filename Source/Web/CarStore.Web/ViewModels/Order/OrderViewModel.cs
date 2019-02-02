@@ -12,6 +12,8 @@ namespace CarStore.Web.ViewModels.Order
             this.CarItems = new HashSet<CarItemViewModel>();
         }
 
+        public int Id { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
