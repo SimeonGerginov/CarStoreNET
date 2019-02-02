@@ -50,7 +50,8 @@ namespace CarStore.Services
                 ShoppingCartId = shoppingCart.Id,
                 CustomerId = customer.Id,
                 TotalPrice = totalPrice,
-                DateAdded = DateTime.UtcNow
+                DateAdded = DateTime.UtcNow,
+                Status = OrderStatus.NotProcessed
             };
 
             shoppingCart.Status = Status.Complete;
