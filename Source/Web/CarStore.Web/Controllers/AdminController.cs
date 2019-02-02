@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -195,6 +196,46 @@ namespace CarStore.Web.Controllers
         {
             await this._adminService.UpdateOrderStatus(orderId, orderStatus);
             return this.RedirectToAction(nameof(AdminController.Orders), "Admin");
+        }
+
+        [HttpGet]
+        public IActionResult OrdersStatistic(DateTime startDate = default(DateTime), DateTime endDate = default(DateTime))
+        {
+            var orders = this._adminService.GetApprovedOrdersInInterval(startDate, endDate).ToList();
+            var ordersStatisticViewModel = new OrdersStatisticViewModel()
+            {
+                Count = orders.Count,
+                TotalProfit = orders.Sum(o => o.TotalPrice)
+            };
+
+            foreach (var order in orders)
+            {
+                var orderViewModel = new OrderViewModel
+                {
+                    Id = order.Id,
+                    FirstName = order.Customer.FirstName,
+                    LastName = order.Customer.LastName,
+                    TotalPrice = order.TotalPrice,
+                    DateAdded = order.DateAdded
+                };
+
+                foreach (var shoppingCartItem in order.ShoppingCart.ShoppingCartItems)
+                {
+                    var carItemViewModel = new CarItemViewModel
+                    {
+                        CarId = shoppingCartItem.CarId,
+                        CarName = shoppingCartItem.Car.Name,
+                        Quantity = shoppingCartItem.Quantity,
+                        TotalPrice = shoppingCartItem.Car.Price * shoppingCartItem.Quantity
+                    };
+
+                    orderViewModel.CarItems.Add(carItemViewModel);
+                }
+
+                ordersStatisticViewModel.Orders.Add(orderViewModel);
+            }
+
+            return this.View(ordersStatisticViewModel);
         }
     }
 }
